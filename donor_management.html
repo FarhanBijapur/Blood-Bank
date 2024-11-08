@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Management - Blood Bank</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+</head>
+
+<!-- Login Section -->
+<section id="loginSection" class="h-screen flex items-center justify-center bg-gray-100">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-sm">
+        <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
+        <div class="space-y-4">
+            <input type="text" id="username" placeholder="Username" class="border border-gray-300 p-2 w-full rounded">
+            <input type="password" id="password" placeholder="Password"
+                class="border border-gray-300 p-2 w-full rounded">
+            <button onclick="login()" class="bg-blue-600 text-white p-2 w-full rounded hover:bg-blue-500">Login</button>
+            <p id="loginError" class="text-red-500 mt-2 hidden">Invalid username or password</p>
+        </div>
+    </div>
+</section>
+
+<body class="bg-gray-100">
+    <header class="bg-red-600 text-white p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-heartbeat text-2xl mr-2"></i>
+            <span class="text-xl font-bold">Blood Bank Management</span>
+        </div>
+        <nav class="flex space-x-4">
+            <a class="hover:text-red-300" href="index.html"><i class="fas fa-home mr-1"></i>Home</a>
+            <a class="hover:text-red-300" href="login_register.html"><i class="fas fa-sign-in-alt mr-1"></i>Login</a>
+            <a class="hover:text-red-300" href="donor_management.html"><i class="fas fa-user-plus mr-1"></i>Donor
+                Management</a>
+            <a class="hover:text-red-300" href="contact.html"><i class="fas fa-envelope mr-1"></i>Contact</a>
+        </nav>
+    </header>
+
+    <main class="p-6">
+        <h1 class="text-2xl font-bold mb-4">Donor Management</h1>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-2">Add Donor</h2>
+            <form id="donorForm" class="flex flex-col space-y-4">
+                <input type="text" id="donorName" placeholder="Full Name" class="border border-gray-300 p-2 rounded"
+                    required>
+                <input type="text" id="bloodGroup" placeholder="Blood Group (e.g., A+, B-)"
+                    class="border border-gray-300 p-2 rounded" required>
+                <input type="text" id="address" placeholder="Address" class="border border-gray-300 p-2 rounded"
+                    required>
+                <input type="tel" id="contact" placeholder="Contact Number" class="border border-gray-300 p-2 rounded"
+                    required>
+                <button type="submit" class="bg-red-600 text-white p-2 rounded hover:bg-red-500">Add Donor</button>
+            </form>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-2">Search Donor</h2>
+            <div class="flex space-x-2 mb-4">
+                <input type="text" id="searchDonor" placeholder="Search by Name"
+                    class="border border-gray-300 p-2 rounded" oninput="searchDonor()">
+                <button onclick="searchDonor()"
+                    class="bg-red-600 text-white p-2 rounded hover:bg-red-500 ml-2">Search</button>
+            </div>
+            <ul id="donorList" class="border border-gray-300 rounded p-4">
+                <!-- Donor list items will be appended here -->
+            </ul>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-2">Generate Donor Report</h2>
+            <div class="flex space-x-2 mb-4">
+                <input type="text" id="reportDonorName" placeholder="Enter Donor Name for Report"
+                    class="border border-gray-300 p-2 rounded">
+                <button onclick="generateReport()" class="bg-blue-600 text-white p-2 rounded hover:bg-blue-500">Generate
+                    Report</button>
+            </div>
+            <ul id="reportList" class="border border-gray-300 rounded p-4 mt-4">
+                <!-- Report items will be appended here -->
+            </ul>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-semibold mb-2">Update/Delete Donor</h2>
+            <input type="text" id="updateName" placeholder="Name to Update/Delete"
+                class="border border-gray-300 p-2 rounded mb-2">
+            <div class="flex flex-col space-y-2 mb-4">
+                <input type="text" id="updateBloodGroup" placeholder="New Blood Group"
+                    class="border border-gray-300 p-2 rounded">
+                <input type="text" id="updateAddress" placeholder="New Address"
+                    class="border border-gray-300 p-2 rounded">
+                <input type="tel" id="updateContact" placeholder="New Contact Number"
+                    class="border border-gray-300 p-2 rounded">
+            </div>
+            <button onclick="updateDonor()" class="bg-yellow-500 text-white p-2 rounded hover:bg-yellow-400">Update
+                Donor</button>
+            <button onclick="deleteDonor()" class="bg-red-600 text-white p-2 rounded hover:bg-red-500 ml-2">Delete
+                Donor</button>
+        </section>
+    </main>
+
+    <footer class="bg-gray-200 text-center py-4">
+        <p class="text-gray-700 italic">“Opportunities knock the door sometimes, so don’t let it go and donate blood.”
+        </p>
+        <p class="text-gray-700 font-bold">- LazyCoder</p>
+    </footer>
+
+    <script>
+        const apiUrl = 'http://localhost:3001/api/donors';
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('http://localhost:3001/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('donorManagementSection').classList.remove('hidden');
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        async function fetchDonors() {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                console.error('Failed to fetch donors:', response.statusText);
+                return;
+            }
+            const donors = await response.json();
+            const donorList = document.getElementById('donorList');
+            donorList.innerHTML = '';
+
+            donors.forEach(donor => {
+                const li = document.createElement('li');
+                li.textContent = `${donor.name} - ${donor.bloodGroup} - ${donor.address} - ${donor.contact}`;
+                donorList.appendChild(li);
+            });
+        }
+
+        async function addDonor(event) {
+            event.preventDefault();
+            const name = document.getElementById('donorName').value;
+            const bloodGroup = document.getElementById('bloodGroup').value;
+            const address = document.getElementById('address').value;
+            const contact = document.getElementById('contact').value;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, bloodGroup, address, contact })
+            });
+
+            if (response.ok) {
+                alert('Donor added successfully');
+                fetchDonors();
+                document.getElementById('donorForm').reset();
+            } else {
+                alert(`Error adding donor: ${await response.text()}`);
+            }
+        }
+
+        async function searchDonor() {
+            const searchQuery = document.getElementById('searchDonor').value.toLowerCase();
+            const response = await fetch(apiUrl);
+            const donors = await response.json();
+            const donorList = document.getElementById('donorList');
+            donorList.innerHTML = '';
+
+            const filteredDonors = donors.filter(donor => donor.name.toLowerCase().includes(searchQuery));
+            if (filteredDonors.length === 0) {
+                donorList.innerHTML = '<li>No donors found</li>';
+            } else {
+                filteredDonors.forEach(donor => {
+                    const li = document.createElement('li');
+                    li.textContent = `${donor.name} - ${donor.bloodGroup} - ${donor.address} - ${donor.contact}`;
+                    donorList.appendChild(li);
+                });
+            }
+        }
+        async function generateReport() {
+            const reportDonorName = document.getElementById('reportDonorName').value.toLowerCase();
+            const response = await fetch(apiUrl);
+            const donors = await response.json();
+            const reportList = document.getElementById('reportList');
+            reportList.innerHTML = '';
+
+            const donor = donors.find(donor => donor.name.toLowerCase() === reportDonorName);
+            if (donor) {
+                reportList.innerHTML = `
+                    <p><strong>Name:</strong> ${donor.name}</p>
+                    <p><strong>Blood Group:</strong> ${donor.bloodGroup}</p>
+                    <p><strong>Address:</strong> ${donor.address}</p>
+                    <p><strong>Contact Number:</strong> ${donor.contact}</p>
+                `;
+            } else {
+                reportList.innerHTML = '<p>No donor found for the specified name.</p>';
+            }
+        }
+
+        async function updateDonor() {
+            const name = document.getElementById('updateName').value;
+            const bloodGroup = document.getElementById('updateBloodGroup').value;
+            const address = document.getElementById('updateAddress').value;
+            const contact = document.getElementById('updateContact').value;
+
+            const response = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, bloodGroup, address, contact })
+            });
+
+            if (response.ok) {
+                alert('Donor updated successfully');
+                fetchDonors();
+                document.getElementById('updateName').value = '';
+                document.getElementById('updateBloodGroup').value = '';
+                document.getElementById('updateAddress').value = '';
+                document.getElementById('updateContact').value = '';
+            } else {
+                alert(`Error updating donor: ${await response.text()}`);
+            }
+        }
+
+        async function deleteDonor() {
+            const name = document.getElementById('updateName').value;
+
+            const response = await fetch(`${apiUrl}/${name}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                alert('Donor deleted successfully');
+                fetchDonors();
+                document.getElementById('updateName').value = '';
+            } else {
+                alert(`Error deleting donor: ${await response.text()}`);
+            }
+        }
+
+
+
+        // Initialize donor list on page load
+        window.onload = fetchDonors;
+    </script>
+</body>
+
+</html>

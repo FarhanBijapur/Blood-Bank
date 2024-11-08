@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Bank Management - Login/Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen">
+    <header class="bg-red-600 text-white p-4 flex justify-between items-center">
+        <h1 class="text-3xl font-bold">Blood Bank Management</h1>
+        <nav class="flex space-x-4">
+            <a class="hover:underline" href="index.html"><i class="fas fa-home mr-1"></i>Home</a>
+            <a class="hover:underline" href="login_register.html"><i class="fas fa-sign-in-alt mr-1"></i>Login/Register</a>
+            <a class="hover:underline" href="donor_management.html"><i class="fas fa-user-plus mr-1"></i>Donor Management</a>
+            <a class="hover:underline" href="contact.html"><i class="fas fa-envelope mr-1"></i>Contact</a>
+        </nav>
+    </header>
+
+    <main class="flex-1 flex justify-center items-center">
+        <!-- Login Page -->
+        <div id="login-page" class="bg-white rounded-lg shadow-lg p-8 w-full max-w-sm">
+            <h2 class="text-2xl font-bold mb-4">Login</h2>
+            <form id="login-form">
+                <div class="mb-4">
+                    <label class="block text-gray-700">Username:</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Password:</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" id="password" placeholder="Password" required>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button id="login-button" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        Log In
+                    </button>
+                </div>
+            </form>
+            <p class="mt-4 text-gray-600">
+                Don't have an account? 
+                <a href="#" id="register-link" class="text-red-600 hover:underline">Register here.</a>
+            </p>
+        </div>
+
+        <!-- Registration Page -->
+        <div id="registration-page" class="bg-white rounded-lg shadow-lg p-8 w-full max-w-sm hidden">
+            <h2 class="text-2xl font-bold mb-4">Register</h2>
+            <form id="registration-form">
+                <div class="mb-4">
+                    <label class="block text-gray-700">Username:</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" id="reg-username" placeholder="Username" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">New Password:</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" id="reg-password" placeholder="New Password" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Confirm Password:</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" id="reg-confirm-password" placeholder="Confirm Password" required>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button id="register-button" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        Register
+                    </button>
+                </div>
+            </form>
+            <p class="mt-4 text-gray-600">
+                Already have an account? 
+                <a href="#" id="login-link" class="text-red-600 hover:underline">Log in here.</a>
+            </p>
+        </div>
+    </main>
+
+    <footer class="bg-gray-200 text-center py-4">
+        <p class="text-gray-700 italic">“Opportunities knock the door sometimes, so don’t let it go and donate blood.”</p>
+        <p class="text-gray-700 font-bold">- LazyCoder</p>
+    </footer>
+
+    <script>
+        // Handle login
+        document.getElementById('login-button').addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username && password) {
+                alert('Logged in successfully!');
+                // Redirect to the homepage after successful login
+                window.location.href = "index.html"; // Redirect to the homepage
+            }
+        });
+
+        // Handle registration
+        document.getElementById('register-button').addEventListener('click', () => {
+            const regUsername = document.getElementById('reg-username').value;
+            const regPassword = document.getElementById('reg-password').value;
+            const regConfirmPassword = document.getElementById('reg-confirm-password').value;
+
+            if (regUsername && regPassword && regPassword === regConfirmPassword) {
+                alert('Registered successfully! Now you can log in.');
+                // Redirect to login page after registration
+                document.getElementById('registration-page').classList.add('hidden');
+                document.getElementById('login-page').classList.remove('hidden');
+            } else if (regPassword !== regConfirmPassword) {
+                alert('Passwords do not match. Please try again.');
+            }
+        });
+
+        // Switch to registration page
+        document.getElementById('register-link').addEventListener('click', () => {
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('registration-page').classList.remove('hidden');
+        });
+
+        // Switch back to login page
+        document.getElementById('login-link').addEventListener('click', () => {
+            document.getElementById('registration-page').classList.add('hidden');
+            document.getElementById('login-page').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

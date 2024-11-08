@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Bank Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-red-600 text-white p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <i class="fas fa-heartbeat text-2xl mr-2"></i>
+            <span class="text-xl font-bold">Blood Bank Management</span>
+        </div>
+        <nav class="flex space-x-4">
+            <a class="hover:text-red-300" href="index.html"><i class="fas fa-home mr-1"></i>Home</a>
+            <a class="hover:text-red-300" href="login_register.html"><i class="fas fa-sign-in-alt mr-1"></i>Login</a>
+            <a class="hover:text-red-300" href="donor_management.html"><i class="fas fa-user-plus mr-1"></i>Donor Management</a>
+            <a class="hover:text-red-300" href="contact.html"><i class="fas fa-envelope mr-1"></i>Contact</a>
+        </nav>
+    </header>
+    <main class="bg-red-300 flex flex-col items-center justify-center py-20">
+        <div class="relative">
+            <img alt="Homepage illustration" class="w-full h-auto mb-4 rounded-lg shadow-lg" src="images/homepage.jpg" />
+        </div>
+        <div class="text-center text-white px-4">
+            <h1 class="text-4xl font-bold mb-2">Welcome to the Blood Bank Management System</h1>
+            <p class="text-lg mb-4">Your health is our priority. Join us in our mission to save lives by donating blood.</p>
+            <p class="mb-6">We provide a comprehensive platform to manage blood donations, track donors, and ensure that we meet the needs of our community.</p>
+            <a href="donor_management.html" class="bg-white text-red-600 hover:bg-red-500 hover:text-white font-bold py-2 px-4 rounded">
+                Become a Donor
+            </a>
+        </div>
+    </main>
+    <footer class="bg-gray-200 text-center py-4">
+        <p class="text-gray-700 italic">“Opportunities knock the door sometimes, so don’t let it go and donate blood.”</p>
+        <p class="text-gray-700 font-bold">- LazyCoder</p>
+    </footer>
+</body>
+</html>
